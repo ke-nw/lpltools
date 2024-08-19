@@ -5,18 +5,18 @@ import json
 # catver2lpl.py: Build lpl playlists from catver.ini (and a few other things)
 # See LICENSE in this repo for licensing info
 
-def read_cfg(filename=None):
+def read_cfg(filename):
     cfg = configparser.ConfigParser()
     cfg.read(filename)
     return cfg
 
-def read_json(filename=None):
+def read_json(filename):
     fp = open(filename, 'r')
     return json.load(fp)
 
 def create_playlist(lpl=None):
     ''' The default playlist has all sorts of juicy settings.
-        Let's just copy them and nuke the item list as a good 
+        Let's just copy them and nuke the item list as a good
         starting point for our new playlist.
     '''
     if lpl is None:
@@ -36,10 +36,10 @@ if __name__ == '__main__':
 
     p = argparse.ArgumentParser()
     p.add_argument('-i', '--ini', metavar='CATVER.INI',
-            help='catver.ini path')
+            help='catver.ini path', required=True)
     p.add_argument('-l', '--lpl', metavar='BASE.LPL',
-            help='path to main playlist db')
-    p.add_argument('-o', '--output', metavar='OUT_PATH', 
+            help='path to main playlist db', required=True)
+    p.add_argument('-o', '--output', metavar='OUT_PATH',
             default=pathlib.Path.cwd(),
             help='output dir [optional]')
     args = p.parse_args()
@@ -64,4 +64,3 @@ if __name__ == '__main__':
         ppath = pathlib.PurePath(args.output, f'{category}.lpl')
         with open(ppath, 'w') as fp:
             fp.write(json.dumps(playlist, indent=4, sort_keys=True))
-
